@@ -1,0 +1,38 @@
+Yes, the logic using:
+
+```cpp
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <arpa/inet.h>
+#endif
+```
+
+✅ **Will work correctly** for most cross-platform C++ projects.
+
+### 🔍 Why it works:
+
+* `_WIN32` is defined by all major compilers (e.g., MSVC, GCC, Clang) when compiling for **Windows** — regardless of 32-bit or 64-bit targets.
+* On **Linux** and **macOS**, `_WIN32` is not defined, so the `#else` branch (`arpa/inet.h`) is included — which is standard for POSIX systems.
+
+### 🛠️ Bonus: Optional safety enhancement
+
+If you want to future-proof or be more explicit, you could do this:
+
+```cpp
+#if defined(_WIN32) || defined(_WIN64)
+#include <winsock2.h>
+#else
+#include <arpa/inet.h>
+#endif
+```
+
+This includes support for both `_WIN32` and `_WIN64`, though in practice `_WIN32` is always defined on Windows, even for 64-bit builds.
+
+---
+
+### ✅ Conclusion:
+
+Yes, your logic is **correct and portable**. It's a standard approach in C++ for handling OS-specific includes.
+
+Let me know if you also want to use this pattern for functions like `sleep()` or socket initialization (like `WSAStartup()` on Windows).
