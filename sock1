@@ -1,0 +1,49 @@
+To conditionally include `#include <winsock2.h>` for **Windows** and `#include <arpa/inet.h>` for **Linux**, you can use preprocessor directives in the generated C++ source files.
+
+Update the part of your code that writes to `.cpp` files inside `create_cpp_file()` like this:
+
+### 🔁 **Replace this existing part:**
+
+```python
+source_file.write("#include <winsock2.h>\n")
+```
+
+### ✅ **With this:**
+
+```python
+source_file.write("#ifdef _WIN32\n")
+source_file.write("#include <winsock2.h>\n")
+source_file.write("#else\n")
+source_file.write("#include <arpa/inet.h>\n")
+source_file.write("#endif\n")
+```
+
+### 📌 Full Modified Snippet:
+
+Within your `create_cpp_file()` method, the updated block would look like:
+
+```python
+with open(source_filename, "w") as source_file:
+    source_file.write(f"// File : {class_name}.cpp \n")
+    source_file.write(f"#include \"{class_name}.h\"\n")
+    source_file.write("#include <string.h>\n")
+    source_file.write("#include <stdio.h>\n")
+    source_file.write("#include <stddef.h>\n")
+    source_file.write("#include <iostream>\n")
+    source_file.write("#ifdef _WIN32\n")
+    source_file.write("#include <winsock2.h>\n")
+    source_file.write("#else\n")
+    source_file.write("#include <arpa/inet.h>\n")
+    source_file.write("#endif\n")
+    source_file.write("using namespace std;\n\n")
+```
+
+
+
+* `#ifdef _WIN32`: This macro is defined by most compilers when compiling for Windows.
+* `#else`: Captures Unix-like systems (Linux, macOS).
+* `arpa/inet.h` is safe to use on those platforms.
+
+This ensures your code compiles platform-specifically with the correct network headers.
+
+Let me know if you also want to abstract platform differences in function calls (like `htonl/ntohl`), or define helper macros for portability.
