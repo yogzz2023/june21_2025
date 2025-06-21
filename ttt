@@ -1,0 +1,49 @@
+To center the **username**, **password**, **login button**, and **register button** in the middle of the login screen **without occupying the full screen width**, you need to adjust the layout in the `LoginPage` class.
+
+Here's a clear and minimal change you can apply:
+
+### ✅ Fix: Wrap the form in a container with a fixed size and center it
+
+**In the `LoginPage` constructor**, locate this section:
+
+```python
+# Glass effect container
+container = QWidget()
+container.setLayout(form_layout)
+container.setStyleSheet("""
+    # background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 30px;
+""")
+```
+
+Now **modify and wrap it like this**:
+
+```python
+# Glass effect container with fixed size
+container = QWidget()
+container.setLayout(form_layout)
+container.setFixedSize(400, 300)  # Adjust width and height as needed
+container.setStyleSheet("""
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    padding: 30px;
+""")
+
+# Center the container
+outer_layout = QVBoxLayout()
+outer_layout.addStretch()
+outer_layout.addWidget(container, alignment=Qt.AlignCenter)
+outer_layout.addStretch()
+
+self.setLayout(outer_layout)
+```
+
+### 🔄 Summary of Changes:
+
+* `container.setFixedSize(400, 300)` ensures it doesn’t stretch full width.
+* `outer_layout` with `addStretch()` before and after centers it vertically and horizontally.
+
+This will make the login form appear centered and clean, without stretching across the entire screen.
+
+Let me know if you'd like it responsive to different screen sizes or need animations/effects added.
